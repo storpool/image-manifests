@@ -10,9 +10,6 @@
     - testing-lab/playbooks/roles/configure_network
     - testing-lab/playbooks/roles/configure_repositories
     - testing-lab/playbooks/roles/install_dependencies
-    - testing-lab/playbooks/roles/setup-services
-    - testing-lab/playbooks/roles/configure_ssh
-    - testing-lab/playbooks/roles/configure-grub
 
 - name: Configure image for baremetal iSCSI boot
   hosts: all
