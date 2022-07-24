@@ -1,0 +1,5 @@
+env/
+ansible/collections/
+ansible/roles/storpool.*
+ansible/roles/netcho.*
+builds/

@@ -1,0 +1,30 @@
+- name: Adding SSH keys for root authorized_keys
+  become: yes
+  ansible.builtin.lineinfile:
+    path: /root/.ssh/authorized_keys
+    create: yes
+    line: "{{ ssh_key }}"
+    owner: root
+    group: root
+    mode: 0600
+  loop: "{{ lookup('url', 'http://sp-mgmt.lab.storpool.local/authorized_keys', wantlist=True) }}"
+  loop_control:
+    loop_var: ssh_key
+
+- name: Download SSH server keys
+  become: yes
+  ansible.builtin.get_url:
+    url: "http://172.16.2.254/sysrcd/{{ item }}"
+    dest: "/etc/ssh/{{ item }}"
+    owner: root
+    group: root
+    mode: 0600
+  loop:
+    - ssh_host_ecdsa_key
+    - ssh_host_ecdsa_key.pub
+    - ssh_host_ed25519_key
+    - ssh_host_ed25519_key.pub
+    - ssh_host_rsa_key
+    - ssh_host_rsa_key.pub
+
+

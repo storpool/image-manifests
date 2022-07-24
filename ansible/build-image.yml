@@ -1,0 +1,44 @@
+- name: Image base
+  hosts: all
+  become_method: sudo
+  roles:
+    - storpool_lab.configure_ssh
+    - storpool.install_sp_python
+    - storpool.bootstrap_node
+    - testing-lab/playbooks/roles/configure_timezone
+    - testing-lab/playbooks/roles/configure_bash
+    - testing-lab/playbooks/roles/configure_network
+    - testing-lab/playbooks/roles/configure_repositories
+    - testing-lab/playbooks/roles/install_dependencies
+    - testing-lab/playbooks/roles/setup-services
+    - testing-lab/playbooks/roles/configure_ssh
+    - testing-lab/playbooks/roles/configure-grub
+
+- name: Configure image for baremetal iSCSI boot
+  hosts: all
+  become_method: sudo
+  roles:
+    - netcho.ironic_prepare
+    - netcho.ironic_iscsi_boot
+
+- name: Clean up cloud-init files and directories
+  hosts: all
+  become_method: sudo
+  tasks:
+    - name: Removing cloud-init seed directory
+      become: true
+      file:
+        path: /var/lib/cloud
+        state: absent
+
+    - name: Removing cloud-init logs
+      become: true
+      file: 
+        path: "/var/log/{{ filename }}"
+        state: absent
+      loop:
+        - cloud-init.log
+        - cloud-init-output.log
+      loop_control:
+        loop_var: filename
+

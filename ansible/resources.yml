@@ -1,0 +1,14 @@
+---
+roles:
+  - src: https://github.com/netcho/ansible-role-ironic-prepare.git
+    name: netcho.ironic_prepare
+  - src: https://github.com/netcho/ansible-role-ironic-iscsi-boot.git
+    name: netcho.ironic_iscsi_boot
+  - src: https://github.com/storpool/ansible-role-install-sp-python.git
+    name: storpool.install_sp_python
+  - src: https://github.com/storpool/ansible-role-storpool-bootstrap-node.git
+    name: storpool.bootstrap_node
+
+collections:    
+  - name: community.general
+
