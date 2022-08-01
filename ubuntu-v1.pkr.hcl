@@ -32,8 +32,9 @@ build {
     playbook_file = "./ansible/build-image.yml"
     extra_arguments = [
       "-vv",
-      "--skip-tags check-requirements",
-      "--extra-vars",
+      "--skip-tags",
+      "check-requirements",
+      "-e",
       "sp_inventory_url=http://sp-mgmt.lab.storpool.local",
     ]
     user = "ubuntu"
