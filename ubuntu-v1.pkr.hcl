@@ -1,12 +1,3 @@
-packer {
-  required_plugins {
-    qemu = {
-      version = ">= 1.0.2"
-      source  = "github.com/hashicorp/qemu"
-    }
-  }
-}
-
 source "qemu" "ubuntu-1804-latest" {
   iso_url = "https://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-amd64.img"
   iso_checksum = "file:https://cloud-images.ubuntu.com/bionic/current/SHA256SUMS"
