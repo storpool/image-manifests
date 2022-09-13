@@ -16,10 +16,10 @@ variables {
   // Generic Cloud (OpenStack) variables
   //
   el_7_boot_command = [
-    "<tab> inst.text inst.gpt net.ifnames=0 inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/centos-7.ks<enter><wait>"
+    "<tab> inst.text inst.gpt net.ifnames=0 inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/enterprise-linux-7.ks<enter><wait>"
   ]
   el_8_boot_command = [
-    "<tab> inst.text inst.gpt net.ifnames=0 inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/almalinux-8.ks<enter><wait>"
+    "<tab> inst.text inst.gpt net.ifnames=0 inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/enterprise-linux-8.ks<enter><wait>"
   ]
   el_9_boot_command = [
     "<tab> inst.text inst.gpt net.ifnames=0 inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/almalinux-9.ks<enter><wait>"

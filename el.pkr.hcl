@@ -50,12 +50,12 @@ source "qemu" "almalinux-8-kickstart" {
 
 build {
   source "qemu.centos-7-kickstart" {
-    vm_name           = "iscsi-centos-7-${formatdate("YYYYMMDD", timestamp())}.img"
+    vm_name           = "iscsi-centos-7-kickstart-${formatdate("YYYYMMDD", timestamp())}.img"
     output_directory  = "builds/el"
   }
 
   source "qemu.almalinux-8-kickstart" {
-    vm_name           = "iscsi-almalinux-8-${formatdate("YYYYMMDD", timestamp())}.img"
+    vm_name           = "iscsi-almalinux-8-kickstart-${formatdate("YYYYMMDD", timestamp())}.img"
     output_directory  = "builds/el"
   }
 
