@@ -10,12 +10,32 @@
     - testing-lab/playbooks/roles/configure_network
     - testing-lab/playbooks/roles/configure_repositories
     - testing-lab/playbooks/roles/install_dependencies
+    - netcho.ironic_prepare
+
+- name: Reboot hosts that requite so
+  hosts: all
+  become_method: sudo
+  tasks:
+    - name: Checking if EL host requires reboot
+      become: yes
+      ansible.builtin.command: /usr/bin/needs-restarting -r
+      register: needs_restart
+      failed_when: false
+      changed_when: needs_restart.rc == 1
+      notify: Reboot host
+      when:
+        - ansible_os_family == "RedHat"
+
+  handlers:
+    - name: Rebooting host
+      become: yes
+      ansible.builtin.reboot:
+      listen: Reboot host
 
 - name: Configure image for baremetal iSCSI boot
   hosts: all
   become_method: sudo
   roles:
-    - netcho.ironic_prepare
     - netcho.ironic_iscsi_boot
 
 - name: Clean up cloud-init files and directories
