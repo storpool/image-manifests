@@ -24,7 +24,7 @@ variables {
   el_9_boot_command = [
     "<tab> inst.text inst.gpt net.ifnames=0 inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/almalinux-9.ks<enter><wait>"
   ]
-  gencloud_disk_size         = "10G"
+  gencloud_disk_size         = "8G"
   gencloud_ssh_username      = "storpool"
   gencloud_ssh_password      = "passw0rd"
 }
