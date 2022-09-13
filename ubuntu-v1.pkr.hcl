@@ -43,5 +43,4 @@ build {
     galaxy_force_install = true
     roles_path = "./ansible/roles/"
   }
- }
-
+}
