@@ -12,6 +12,7 @@ source "qemu" "ubuntu-1804-latest" {
   iso_checksum = "file:https://cloud-images.ubuntu.com/bionic/current/SHA256SUMS"
   output_directory = "builds/ubuntu-1804-latest"
   format = "raw"
+  cpus = 4
   memory = 2048
   disk_image = true
   disk_size = "5G"
