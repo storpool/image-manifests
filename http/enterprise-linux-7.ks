@@ -24,7 +24,7 @@ zerombr
 bootloader --location=mbr --append=" rhgb crashkernel=auto"
 clearpart --all --initlabel
 partition biosboot --asprimary --fstype="biosboot" --size=1
-partition /boot/efi --asprimary --fstype="efi" --label ESP --size=200
+partition /boot/efi --asprimary --fstype="vfat" --label ESP --size=200
 partition / --asprimary --fstype="xfs" --label ROOTFS --size=4096 --grow
 
 # System authorization information
