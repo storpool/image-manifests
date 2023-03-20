@@ -8,6 +8,8 @@ roles:
     name: storpool.install_sp_python
   - src: https://github.com/storpool/ansible-role-storpool-bootstrap-node.git
     name: storpool.bootstrap_node
+  - src: https://github.com/storpool/ansible-role-install-storpool-components.git
+    name: storpool.install_storpool_components
 
 collections:    
   - name: community.general
