@@ -95,14 +95,14 @@ build {
     output_directory  = "builds/cloud/qemu.almalinux-8-prebaked/${formatdate("YYYY-MM-DD-hh", timestamp())}"
   }
 
-  name = "cloud"
+  name = "localdisk"
 
   provisioner "ansible" {
     playbook_file = "${path.root}/ansible/build-iscsi-image.yml"
     extra_arguments = [
       "-vv",
       "--skip-tags",
-      "check-requirements,cleanup_ifcfg_files,ironic,ironic-iscsi",
+      "check-requirements,cleanup_ifcfg_files,ironic-iscsi",
       "-e",
       "sp_inventory_url=http://sp-mgmt.lab.storpool.local",
     ]
