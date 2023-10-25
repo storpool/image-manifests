@@ -9,6 +9,15 @@
     - storpool.install_sp_python
     - storpool.bootstrap_node
 
+- name: Proxmox VE installation
+  hosts: all
+  become_method: sudo
+  roles:
+    - pve
+  tags:
+    - never
+    - proxmox_ve
+
 - name: Reboot hosts that requite so
   hosts: all
   become_method: sudo
