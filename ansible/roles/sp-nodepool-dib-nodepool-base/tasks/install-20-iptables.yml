@@ -1,0 +1,65 @@
+---
+- name: "20-iptables: Make sure /etc/iptables exists"
+  become: yes
+  ansible.builtin.file:
+    path: /etc/iptables
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: "20-iptables: Create the IPv4 rules file"
+  become: yes
+  # FIXME: this should not be hardcoded
+  ansible.builtin.copy:
+    dest: /etc/iptables/rules.v4
+    content: |
+      *filter
+      :INPUT ACCEPT [0:0]
+      :FORWARD ACCEPT [0:0]
+      :OUTPUT ACCEPT [0:0]
+      :openstack-INPUT - [0:0]
+      -A INPUT -j openstack-INPUT
+      -A openstack-INPUT -i lo -j ACCEPT
+      -A openstack-INPUT -p icmp --icmp-type any -j ACCEPT
+      #-A openstack-INPUT -p udp --dport 5353 -d 224.0.0.251 -j ACCEPT
+      # SSH from anywhere without -m state to avoid hanging connections on iptables-restore
+      -A openstack-INPUT -m tcp -p tcp --dport 22 -j ACCEPT
+      -A openstack-INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+      # Public TCP ports
+      -A openstack-INPUT -p tcp -m state --state NEW -m tcp --dport 19885 -j ACCEPT
+      # Ports 69 and 6385 allow to allow ironic VM nodes to reach tftp and
+      # the ironic API from the neutron public net
+      -A openstack-INPUT -s 172.24.4.0/23 -p udp -m udp --dport 69 -j ACCEPT
+      -A openstack-INPUT -s 172.24.4.0/23 -p tcp -m tcp --dport 6385 -j ACCEPT
+      # Ports 80, 8000, 8003, 8004 from the devstack neutron public net to allow
+      # nova servers to reach heat-api-cfn, heat-api-cloudwatch, heat-api
+      -A openstack-INPUT -s 172.24.4.0/23 -p tcp -m tcp --dport 80 -j ACCEPT
+      -A openstack-INPUT -s 172.24.4.0/23 -p tcp -m tcp --dport 8000 -j ACCEPT
+      -A openstack-INPUT -s 172.24.4.0/23 -p tcp -m tcp --dport 8003 -j ACCEPT
+      -A openstack-INPUT -s 172.24.4.0/23 -p tcp -m tcp --dport 8004 -j ACCEPT
+      -A openstack-INPUT -m limit --limit 2/min -j LOG --log-prefix "iptables dropped: "
+      -A openstack-INPUT -j REJECT --reject-with icmp-host-prohibited
+      COMMIT
+
+- name: "20-iptables: Create the IPv6 rules file"
+  become: yes
+  # FIXME: this should not be hardcoded
+  copy:
+    dest: /etc/iptables/rules.v6
+    content: |
+      *filter
+      :INPUT ACCEPT [0:0]
+      :FORWARD ACCEPT [0:0]
+      :OUTPUT ACCEPT [0:0]
+      :openstack-INPUT - [0:0]
+      -A INPUT -j openstack-INPUT
+      -A openstack-INPUT -i lo -j ACCEPT
+      -A openstack-INPUT -p ipv6-icmp -j ACCEPT
+      # SSH from anywhere without -m state to avoid hanging connections on iptables-restore
+      -A openstack-INPUT -m tcp -p tcp --dport 22 -j ACCEPT
+      -A openstack-INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+      # Public TCP ports
+      -A openstack-INPUT -p tcp -m state --state NEW -m tcp --dport 19885 -j ACCEPT
+      -A openstack-INPUT -j REJECT --reject-with icmp6-adm-prohibited
+      COMMIT

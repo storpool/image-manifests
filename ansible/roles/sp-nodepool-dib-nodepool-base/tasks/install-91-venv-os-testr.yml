@@ -1,0 +1,15 @@
+---
+- name: "91-venv-os-testr: Create the virtual environment"
+  become: yes
+  ansible.builtin.shell:
+    argv: [ "python3", "-m", "venv", "/usr/os-testr-env" ]
+
+- name: "91-venv-os-testr: Upgrade pip within the virtual environment"
+  become: yes
+  ansible.builtin.shell:
+    argv: [ "/usr/os-testr-env/bin/pip", "install", "--upgrade", "pip" ]
+
+- name: "91-venv-os-testr: Install os-testr within the virtual environment"
+  become: yes
+  ansible.builtin.shell:
+    argv: [ "/usr/os-testr-env/bin/pip", "install", "os-testr" ]

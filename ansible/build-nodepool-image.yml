@@ -1,10 +1,6 @@
-- name: Building Nodepool Image
+- name: Build a Nodepool image
   hosts: all
   become_method: sudo
   roles:
     - sp-nodepool-dib-nodepool-base
     - openstack-repos
-    - sp-nodepool-storpool-preseed
-    - storpool.install_sp_python
-    - storpool.bootstrap_node
-    - storpool.install_storpool_components
