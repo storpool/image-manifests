@@ -1,0 +1,21 @@
+---
+- name: "96-clean-cron: Remove all periodical crontab files"
+  become: yes
+  ansible.builtin.shell:
+    argv:
+      - find
+      - /etc/cron.monthly
+      - /etc/cron.weekly
+      - /etc/cron.daily
+      - /etc/cron.hourly
+      - /etc/cron.d
+      - -mindepth
+      - 1
+      - -maxdepth
+      - 1
+      - -exec
+      - rm
+      - -rf
+      - --
+      - '{}'
+      - +

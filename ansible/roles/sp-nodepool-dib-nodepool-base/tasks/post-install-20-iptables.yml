@@ -1,0 +1,6 @@
+---
+ - name: "20-iptables: Enable the netfilter-persistent service"
+   become: true
+   systemd:
+     name: netfilter-persistent.service
+     enabled: true

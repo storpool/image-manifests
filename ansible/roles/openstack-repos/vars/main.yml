@@ -1,0 +1,14 @@
+---
+repositories:
+  - cinder
+  - cinder-tempest-plugin
+  - devstack
+  - glance
+  - keystone
+  - neutron
+  - nova
+  - os-brick
+  - placement
+  - requirements
+  - swift
+  - tempest

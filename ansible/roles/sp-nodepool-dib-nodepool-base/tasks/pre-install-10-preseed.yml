@@ -1,0 +1,18 @@
+- name: "10-preseed: Create a temporary config file"
+  # FIXME: this needs to be done using a temporary file, right?
+  ansible.builtin.copy:
+    dest: /tmp/preseed-debconf.txt
+    content: |
+      d-i iptables-persistent/autosave_done boolean true
+      d-i iptables-persistent/autosave_v4 boolean false
+      d-i iptables-persistent/autosave_v6 boolean false
+
+- name: "10-preseed: Apply the configuration"
+  become: yes
+  ansible.builtin.shell:
+    argv: [ "debconf-set-selections", "/tmp/preseed-debconf.txt" ]
+
+- name: "10-preseed: Remove the temporary file"
+  ansible.builtin.file:
+    path: /tmp/preseed-debconf.txt
+    state: absent

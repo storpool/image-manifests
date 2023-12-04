@@ -1,0 +1,32 @@
+---
+- name: "zuul-worker: Create the group zuul"
+  become: true
+  ansible.builtin.group:
+    name: zuul
+
+- name: "zuul-worker: Create the user account zuul"
+  become: true
+  ansible.builtin.user:
+    name: zuul
+    group: zuul
+
+- name: "zuul-worker: Allow the account zuul passwordless sudo access"
+  become: true
+  ansible.builtin.copy:
+    dest: /etc/sudoers.d/zuul
+    owner: root
+    group: root
+    mode: 0440
+    content: |
+      zuul ALL=(ALL) NOPASSWD:ALL
+
+- name: "zuul-worker: Create the SSH configuration directory"
+  become: true
+  ansible.builtin.file:
+    path: /home/zuul/.ssh
+    state: directory
+    owner: zuul
+    group: zuul
+    mode: 0755
+
+# FIXME: figure out what to do about /opt/cache/files and /home/zuul/cache

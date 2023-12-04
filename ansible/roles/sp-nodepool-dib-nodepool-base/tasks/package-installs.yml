@@ -1,0 +1,14 @@
+---
+- name: "packages install: Packages required by Nodepool"
+  become: true
+  apt:
+    name:
+      # ensure-venv
+      - python3-venv
+      # nodepool-base
+      - unbound
+      # In order to load at boot the iptables rules that are configured
+      # later in this role, the package 'iptables-persistent' is required.
+      # Refactor if the role starts supporting more distros.
+      - iptables-persistent
+    update_cache: true

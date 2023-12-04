@@ -1,0 +1,30 @@
+---
+# project-config/nodepool/elements
+- name: "Base host configuration for the needs of Nodepool"
+  block:
+    # nodepool-base/root.d/50-apt-allow-unauthenticated: SKIPPED
+    # nodepool-base/root.d/60-apt-phased-udpates: SKIPPED
+
+    - include_tasks: pre-install-10-preseed.yml
+
+    - include_tasks: package-installs.yml
+
+    # nodepool-base/install.d/05-record-details: SKIPPED
+    # nodepool-base/install.d/06-record-builddate: SKIPPED
+    - include_tasks: install-20-iptables.yml
+    # nodepool-base/install.d/50-disable-metadata-cloudinit: SKIPPED
+    # zuul-worker/install.d/60-zuul-worker
+    - include_tasks: install-60-zuul-worker.yml
+    - include_tasks: install-91-venv-os-testr.yml
+    - include_tasks: install-96-clean-cron.yml
+    - include_tasks: install-99-disable-rfc3041.yml
+    - include_tasks: post-install-20-iptables.yml
+
+    # post-install.d/89-data-files: SKIPPED
+
+    # finalise/89-boot-settings: SKIPPED
+    # finalise/89-glean: SKIPPED
+    # finalise/89-journald-persistent: SKIPPED
+    # finalise/89-nodepool-dir: SKIPPED
+
+    # cleanup/50-root: skipped

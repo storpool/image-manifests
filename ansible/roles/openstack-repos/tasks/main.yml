@@ -1,0 +1,24 @@
+---
+- name: Create the base repo directory
+  become: yes
+  ansible.builtin.file:
+    path: /opt/git/opendev.org/openstack
+    owner: "{{ ansible_user }}"
+    state: directory
+
+- name: Clone repositories at /opt/git/opendev.org/openstack
+  ansible.builtin.git:
+    repo: "https://opendev.org/openstack/{{ repo }}.git"
+    dest: "/opt/git/opendev.org/openstack/{{ repo }}"
+  loop: "{{ repositories }}"
+  loop_control:
+    loop_var: repo
+
+- name: Clone repositories at /home/ubuntu/src/opendev.org/openstack
+  ansible.builtin.git:
+    repo: "https://opendev.org/openstack/{{ repo }}.git"
+    dest: "/home/{{ ansible_user }}/src/opendev.org/openstack/{{ repo }}"
+  loop: "{{ repositories }}"
+  loop_control:
+    loop_var: repo
+

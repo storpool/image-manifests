@@ -1,0 +1,12 @@
+---
+- name: "99-disable-rfc3041: Disable the Privacy extensions for IPv6 (RFC3041)"
+  become: true
+  copy:
+    dest: /etc/sysctl.d/99-cloudimg-ipv6.conf
+    owner: root
+    group: root
+    mode: 0644
+    content: |
+      # See https://bugs.launchpad.net/ubuntu/+source/procps/+bug/1068756
+      net.ipv6.conf.all.use_tempaddr=0
+      net.ipv6.conf.default.use_tempaddr=0
