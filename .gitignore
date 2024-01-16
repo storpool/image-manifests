@@ -1,7 +1,9 @@
 .idea/
 env/
 ansible/collections/
+ansible/roles/openstack-*
 ansible/roles/storpool.*
+ansible/roles/sp-*
 ansible/roles/netcho.*
 ansible/testing-lab/
 builds/
