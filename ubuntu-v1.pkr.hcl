@@ -74,23 +74,23 @@ source "qemu" "ubuntu-2204-latest" {
 build {
   source "qemu.ubuntu-1804-latest" {
     vm_name           = "ubuntu-1804.raw"
-    output_directory  = "builds/iscsi/qemu.ubuntu-1804-latest/${formatdate("YYYY-MM-DD-hh", timestamp())}"
+    output_directory  = "builds/localdisk/qemu.ubuntu-1804-latest/${formatdate("YYYY-MM-DD-hh", timestamp())}"
   }
 
   source "qemu.ubuntu-2004-latest" {
     vm_name           = "ubuntu-2004.raw"
-    output_directory  = "builds/iscsi/qemu.ubuntu-2004-latest/${formatdate("YYYY-MM-DD-hh", timestamp())}"
+    output_directory  = "builds/localdisk/qemu.ubuntu-2004-latest/${formatdate("YYYY-MM-DD-hh", timestamp())}"
   }
 
   source "qemu.ubuntu-2204-latest" {
     vm_name           = "ubuntu-2204.raw"
-    output_directory  = "builds/iscsi/qemu.ubuntu-2204-latest/${formatdate("YYYY-MM-DD-hh", timestamp())}"
+    output_directory  = "builds/localdisk/qemu.ubuntu-2204-latest/${formatdate("YYYY-MM-DD-hh", timestamp())}"
   }
 
-  name = "iscsi"
+  name = "localdisk"
 
   provisioner "ansible" {
-    playbook_file = "${path.root}/ansible/build-iscsi-image.yml"
+    playbook_file = "${path.root}/ansible/build-local-image.yml"
     extra_arguments = [
       "-vv",
       "--skip-tags",
@@ -104,49 +104,7 @@ build {
   }
 
   post-processor "checksum" {
-    checksum_types = ["md5", "sha256"]
-    output = "builds/${build.name}/${source.name}/${formatdate("YYYY-MM-DD-hh", timestamp())}/{{.ChecksumType}}.checksum"                                                                                                                    
-  }
-
-  post-processor "manifest" {
-    output = "builds/${build.name}/${source.name}/${formatdate("YYYY-MM-DD-hh", timestamp())}/manifest.json"
-  }
-}
-
-build {
-  source "qemu.ubuntu-1804-latest" {
-    vm_name           = "ubuntu-1804.raw"
-    output_directory  = "builds/cloud/qemu.ubuntu-1804-latest/${formatdate("YYYY-MM-DD-hh", timestamp())}"
-  }
-
-  source "qemu.ubuntu-2004-latest" {
-    vm_name           = "ubuntu-2004.raw"
-    output_directory  = "builds/cloud/qemu.ubuntu-2004-latest/${formatdate("YYYY-MM-DD-hh", timestamp())}"
-  }
-
-  source "qemu.ubuntu-2204-latest" {
-    vm_name           = "ubuntu-2204.raw"
-    output_directory  = "builds/cloud/qemu.ubuntu-2204-latest/${formatdate("YYYY-MM-DD-hh", timestamp())}"
-  }
-
-  name = "cloud"
-
-  provisioner "ansible" {
-    playbook_file = "${path.root}/ansible/build-iscsi-image.yml"
-    extra_arguments = [
-      "-vv",
-      "--skip-tags",
-      "check-requirements,cleanup_ifcfg_files,ironic,ironic-iscsi",
-      "-e",
-      "sp_inventory_url=http://sp-mgmt.lab.storpool.local",
-    ]
-    user = "storpool"
-    galaxy_file = "${path.root}/ansible/resources.yml"
-    roles_path = "${path.root}/ansible/roles/"
-  }
-
-  post-processor "checksum" {
-    checksum_types = ["md5", "sha256"]
+    checksum_types = ["sha256"]
     output = "builds/${build.name}/${source.name}/${formatdate("YYYY-MM-DD-hh", timestamp())}/{{.ChecksumType}}.checksum"                                                                                                                    
   }
 

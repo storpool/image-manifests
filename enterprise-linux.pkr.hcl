@@ -1,6 +1,6 @@
 source "qemu" "centos-7-prebaked" {
   iso_url            = "file:///opt/image-base-cache/centos7-base.qcow2"
-  iso_checksum       = "sha256:69592e4fe8b32bc141cc557c3430cb15ee15e1d8d09a677c2e55693d28ea9e12"
+  iso_checksum       = "sha256:dc54c6402bb4fe0326dd9b76c62ceaedd18937874ffb71709ad382dbc962f25f"
   shutdown_command   = var.root_shutdown_command
   accelerator        = "kvm"
   ssh_username       = "centos"
@@ -24,7 +24,7 @@ source "qemu" "centos-7-prebaked" {
 
 source "qemu" "almalinux-8-prebaked" {
   iso_url            = "file:///opt/image-base-cache/alma8-base.qcow2"
-  iso_checksum       = "sha256:25b824f064e945013d20fc88bb9ed9279310eac8eedb44d3d7560fd43950d7ce"
+  iso_checksum       = "sha256:1a42e06f91912a11c5a9a9e689332e2884e151fb7e4f2ad1fc571473636a59c9"
   shutdown_command   = var.root_shutdown_command
   accelerator        = "kvm"
   http_directory     = var.http_directory
@@ -50,18 +50,18 @@ source "qemu" "almalinux-8-prebaked" {
 build {
   source "qemu.centos-7-prebaked" {
     vm_name           = "centos-7.raw"
-    output_directory  = "builds/iscsi/qemu.centos-7-prebaked/${formatdate("YYYY-MM-DD-hh", timestamp())}"
+    output_directory  = "builds/localdisk/qemu.centos-7-prebaked/${formatdate("YYYY-MM-DD-hh", timestamp())}"
   }
 
   source "qemu.almalinux-8-prebaked" {
     vm_name           = "almalinux-8.raw"
-    output_directory  = "builds/iscsi/qemu.almalinux-8-prebaked/${formatdate("YYYY-MM-DD-hh", timestamp())}"
+    output_directory  = "builds/localdisk/qemu.almalinux-8-prebaked/${formatdate("YYYY-MM-DD-hh", timestamp())}"
   }
 
-  name = "iscsi"
+  name = "localdisk"
 
   provisioner "ansible" {
-    playbook_file = "${path.root}/ansible/build-iscsi-image.yml"
+    playbook_file = "${path.root}/ansible/build-local-image.yml"
     extra_arguments = [
       "-vv",
       "--skip-tags",
@@ -75,49 +75,12 @@ build {
   }
 
   post-processor "checksum" {
-    checksum_types = ["md5", "sha256"]
-    output = "builds/${build.name}/${source.name}/${formatdate("YYYY-MM-DD-hh", timestamp())}/{{.ChecksumType}}.checksum"
+    checksum_types = ["sha256"]
+    output = "builds/${build.name}/qemu.${source.name}/${formatdate("YYYY-MM-DD-hh", timestamp())}/{{.ChecksumType}}.checksum"
   }
 
   post-processor "manifest" {
-    output = "builds/${build.name}/${source.name}/${formatdate("YYYY-MM-DD-hh", timestamp())}/manifest.json"
-  }
-}
-
-build {
-  source "qemu.centos-7-prebaked" {
-    vm_name           = "centos-7.raw"
-    output_directory  = "builds/cloud/qemu.centos-7-prebaked/${formatdate("YYYY-MM-DD-hh", timestamp())}"
-  }
-
-  source "qemu.almalinux-8-prebaked" {
-    vm_name           = "almalinux-8.raw"
-    output_directory  = "builds/cloud/qemu.almalinux-8-prebaked/${formatdate("YYYY-MM-DD-hh", timestamp())}"
-  }
-
-  name = "localdisk"
-
-  provisioner "ansible" {
-    playbook_file = "${path.root}/ansible/build-iscsi-image.yml"
-    extra_arguments = [
-      "-vv",
-      "--skip-tags",
-      "check-requirements,cleanup_ifcfg_files,ironic-iscsi",
-      "-e",
-      "sp_inventory_url=http://sp-mgmt.lab.storpool.local",
-    ]
-    user = "storpool"
-    galaxy_file = "${path.root}/ansible/resources.yml"
-    roles_path = "${path.root}/ansible/roles/"
-  }
-
-  post-processor "checksum" {
-    checksum_types = ["md5", "sha256"]
-    output = "builds/${build.name}/${source.name}/${formatdate("YYYY-MM-DD-hh", timestamp())}/{{.ChecksumType}}.checksum"
-  }
-
-  post-processor "manifest" {
-    output = "builds/${build.name}/${source.name}/${formatdate("YYYY-MM-DD-hh", timestamp())}/manifest.json"
+    output = "builds/${build.name}/qemu.${source.name}/${formatdate("YYYY-MM-DD-hh", timestamp())}/manifest.json"
   }
 }
 
