@@ -71,6 +71,24 @@ source "qemu" "ubuntu-2204-latest" {
   qemu_binary = "/usr/libexec/qemu-kvm"
 }
 
+source "qemu" "ubuntu-2404-latest" {
+  iso_url = "https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-amd64.img"
+  iso_checksum = "file:https://cloud-images.ubuntu.com/noble/current/SHA256SUMS"
+  format = "raw"
+  cpus = 4
+  memory = 2048
+  disk_image = true
+  disk_size = "5G"
+  headless = true
+  disable_vnc = true
+  cd_files = ["./cloud-init/meta-data", "./cloud-init/user-data"]
+  cd_label = "cidata"
+  shutdown_command  = "echo 'packer' | sudo -S shutdown -P now"
+  ssh_username = "ubuntu"
+  ssh_password = "passw0rd"
+  qemu_binary = "/usr/libexec/qemu-kvm"
+}
+
 build {
   source "qemu.ubuntu-1804-latest" {
     vm_name           = "ubuntu-1804.raw"
@@ -85,6 +103,11 @@ build {
   source "qemu.ubuntu-2204-latest" {
     vm_name           = "ubuntu-2204.raw"
     output_directory  = "builds/localdisk/qemu.ubuntu-2204-latest/${formatdate("YYYY-MM-DD-hh", timestamp())}"
+  }
+
+  source "qemu.ubuntu-2404-latest" {
+    vm_name           = "ubuntu-2404.raw"
+    output_directory  = "builds/localdisk/qemu.ubuntu-2404-latest/${formatdate("YYYY-MM-DD-hh", timestamp())}"
   }
 
   name = "localdisk"
@@ -174,4 +197,3 @@ build {
     output = "builds/ubuntu-2204-nodepool/${build.name}-${source.name}-manifest.json"
   }
 }
-
