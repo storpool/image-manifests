@@ -3,10 +3,10 @@ source "qemu" "windows-server-2022" {
   iso_checksum       = "sha256:3e4fa6d8507b554856fc9ca6079cc402df11a8b79344871669f0251535255325"
   shutdown_command   = "shutdown /s /t 30 /f"
   shutdown_timeout   = "15m"
-  boot_wait          = "4s"
+  boot_wait          = "1s"
   boot_command       = [ "<enter><wait4><enter><wait4><enter>" ]
   accelerator        = "kvm"
-  cd_files           = [ "./asd.xml" ]
+  cd_files           = [ "./win/2022-server/Autounattend.xml", "./scripts/win-common/fixnetwork.ps1", "./scripts/win-common/ConfigureRemotingForAnsible.ps1" ]
   cpus               = var.cpus
   disk_interface     = "virtio-scsi"
   disk_size          = 15360
@@ -39,10 +39,10 @@ build {
 
   name = "localdisk"
 
-  #provisioner "powershell" {
-  #  script = "./scripts/win-common/cloudbase.ps1"
-  #  elevated_user = "Administrator"
-  #  elevated_password = "passw0rd"
-  #}
+  provisioner "powershell" {
+    script = "./scripts/win-common/cloudbase.ps1"
+    elevated_user = "Administrator"
+    elevated_password = "passw0rd"
+  }
 }
 
