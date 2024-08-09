@@ -175,19 +175,19 @@
                     <RequiresUserInput>true</RequiresUserInput>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
-		    <CommandLine>cmd.exe /c msiexec /i "G:\virtio-win-gt-x64.msi" /qn /l*v "C:\Windows\Temp\virtio-win.log" /norestart ADDLOCAL=ALL</CommandLine>
+		    <CommandLine>cmd.exe /c msiexec /i "F:\virtio-win-gt-x64.msi" /qn /l*v "C:\Windows\Temp\virtio-win.log" /norestart ADDLOCAL=ALL</CommandLine>
                     <Description>Network prompt</Description>
                     <Order>3</Order>
                     <RequiresUserInput>true</RequiresUserInput>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
-                    <CommandLine>cmd.exe /c powershell -File F:\fixnetwork.ps1</CommandLine>
+                    <CommandLine>cmd.exe /c powershell -File E:\fixnetwork.ps1</CommandLine>
                     <Description>Fix public network</Description>
                     <Order>4</Order>
                     <RequiresUserInput>true</RequiresUserInput>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
-                    <CommandLine>cmd.exe /c powershell -File F:\ConfigureRemotingForAnsible.ps1</CommandLine>
+                    <CommandLine>cmd.exe /c powershell -File E:\ConfigureRemotingForAnsible.ps1</CommandLine>
                     <Description>Enable WinRM</Description>
                     <Order>5</Order>
                     <RequiresUserInput>true</RequiresUserInput>
