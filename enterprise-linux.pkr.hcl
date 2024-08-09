@@ -22,9 +22,9 @@ source "qemu" "centos-7-prebaked" {
   cd_label           = "cidata"
 }
 
-source "qemu" "almalinux-8-prebaked" {
-  iso_url            = "file:///opt/image-base-cache/alma8-base.qcow2"
-  iso_checksum       = "sha256:1a42e06f91912a11c5a9a9e689332e2884e151fb7e4f2ad1fc571473636a59c9"
+source "qemu" "almalinux-8-latest" {
+  iso_url            = "https://repo.almalinux.org/almalinux/8/cloud/x86_64/images/AlmaLinux-8-GenericCloud-UEFI-latest.x86_64.qcow2"
+  iso_checksum       = "file:https://repo.almalinux.org/almalinux/8/cloud/x86_64/images/CHECKSUM"
   shutdown_command   = var.root_shutdown_command
   accelerator        = "kvm"
   http_directory     = var.http_directory
@@ -53,9 +53,9 @@ build {
     output_directory  = "builds/localdisk/qemu.centos-7-prebaked/${formatdate("YYYY-MM-DD-hh", timestamp())}"
   }
 
-  source "qemu.almalinux-8-prebaked" {
+  source "qemu.almalinux-8-latest" {
     vm_name           = "almalinux-8.raw"
-    output_directory  = "builds/localdisk/qemu.almalinux-8-prebaked/${formatdate("YYYY-MM-DD-hh", timestamp())}"
+    output_directory  = "builds/localdisk/qemu.almalinux-8-latest/${formatdate("YYYY-MM-DD-hh", timestamp())}"
   }
 
   name = "localdisk"
