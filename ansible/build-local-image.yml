@@ -81,3 +81,9 @@
       become: true
       ansible.builtin.command: hostnamectl set-hostname "" --static
 
+    - name: Removing /etc/resolv.conf
+      become: true
+      ansible.builtin.file:
+        path: /etc/resolv.conf
+        state: absent
+
