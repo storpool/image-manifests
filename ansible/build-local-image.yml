@@ -78,6 +78,6 @@
         loop_var: filename
 
     - name: Resetting static hostname
-      become: yes
+      become: true
       ansible.builtin.command: hostnamectl set-hostname "" --static
 
