@@ -16,25 +16,6 @@ source "qemu" "ubuntu-1804-latest" {
   qemu_binary = "/usr/libexec/qemu-kvm"
 }
 
-source "qemu" "ubuntu-2004-20221202" {
-  iso_url = "https://cloud-images.ubuntu.com/focal/20221202/focal-server-cloudimg-amd64.img"
-  iso_checksum = "file:https://cloud-images.ubuntu.com/focal/20221202/SHA256SUMS"
-  format = "raw"
-  cpus = 4
-  memory = 2048
-  disk_image = true
-  disk_size = "5G"
-  headless = true
-  disable_vnc = true
-  cd_files = ["./cloud-init/meta-data", "./cloud-init/user-data"]
-  cd_label = "cidata"
-  shutdown_command  = "echo 'packer' | sudo -S shutdown -P now"
-  ssh_username = "ubuntu"
-  ssh_password = "passw0rd"
-  qemu_binary = "/usr/libexec/qemu-kvm"
-  qemuargs = [["-cpu", "host"]]
-}
-
 source "qemu" "ubuntu-2004-latest" {
   iso_url = "https://cloud-images.ubuntu.com/focal/current/focal-server-cloudimg-amd64.img"
   iso_checksum = "file:https://cloud-images.ubuntu.com/focal/current/SHA256SUMS"
