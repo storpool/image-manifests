@@ -107,11 +107,11 @@ build {
 
   post-processor "checksum" {
     checksum_types = ["sha256"]
-    output = "builds/${build.name}/${source.name}/${formatdate("YYYY-MM-DD-hh", timestamp())}/{{.ChecksumType}}.checksum"                                                                                                                    
+    output = "builds/${build.name}/qemu.${source.name}/${formatdate("YYYY-MM-DD-hh", timestamp())}/{{.ChecksumType}}.checksum"
   }
 
   post-processor "manifest" {
-    output = "builds/${build.name}/${source.name}/${formatdate("YYYY-MM-DD-hh", timestamp())}/manifest.json"
+    output = "builds/${build.name}/qemu.${source.name}/${formatdate("YYYY-MM-DD-hh", timestamp())}/manifest.json"
   }
 }
 
