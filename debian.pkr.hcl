@@ -33,7 +33,7 @@ build {
       "-e",
       "sp_inventory_url=http://sp-mgmt.lab.storpool.local",
     ]
-    user = "storpool"
+    user = "debian"
     galaxy_file = "${path.root}/ansible/resources.yml"
     roles_path = "${path.root}/ansible/roles/"
   }
