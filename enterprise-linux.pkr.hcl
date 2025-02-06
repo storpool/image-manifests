@@ -63,11 +63,9 @@ build {
   provisioner "ansible" {
     playbook_file = "${path.root}/ansible/build-local-image.yml"
     extra_arguments = [
-      "-vv",
-      "--skip-tags",
-      "check-requirements,cleanup_ifcfg_files",
-      "-e",
-      "sp_inventory_url=http://sp-mgmt.lab.storpool.local",
+      "--skip-tags", "check-requirements,cleanup_ifcfg_files",
+      "-e", "sp_inventory_url=http://sp-mgmt.lab.storpool.local",
+      "--scp-extra-args", "'-O'"
     ]
     user = "storpool"
     galaxy_file = "${path.root}/ansible/resources.yml"
