@@ -1,6 +1,6 @@
 source "qemu" "centos-7-prebaked" {
   iso_url            = "file:///opt/image-base-cache/centos7-base.qcow2"
-  iso_checksum       = "sha256:dc54c6402bb4fe0326dd9b76c62ceaedd18937874ffb71709ad382dbc962f25f"
+  iso_checksum       = "sha256:e3e09282906e3a9014ad4692b9d695227fc3fe828c686ead044c76e043510737"
   shutdown_command   = var.root_shutdown_command
   accelerator        = "kvm"
   ssh_username       = "centos"
