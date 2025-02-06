@@ -56,19 +56,19 @@
   tags:
     - ironic
 
-- name: Clean up cloud-init files and directories
+- name: Clean up files and directories
   hosts: all
   become_method: sudo
   tasks:
     - name: Removing cloud-init seed directory
       become: true
-      file:
+      ansible.builtin.file:
         path: /var/lib/cloud
         state: absent
 
     - name: Removing cloud-init logs
       become: true
-      file: 
+      ansible.builtin.file: 
         path: "/var/log/{{ filename }}"
         state: absent
       loop:
@@ -77,13 +77,24 @@
       loop_control:
         loop_var: filename
 
-    - name: Resetting static hostname
-      become: true
-      ansible.builtin.command: hostnamectl set-hostname "" --static
-
-    - name: Removing /etc/resolv.conf
+    - name: Removing systemd state files
       become: true
       ansible.builtin.file:
-        path: /etc/resolv.conf
+        path: "{{ path }}"
         state: absent
+      loop:
+        - /etc/machine-id
+        - /etc/machine-info
+        - /etc/hostname
+        - /var/lib/systemd/credential.secret
+        - /var/lib/systemd/random-seed
+      loop_control:
+        loop_var: path
+
+    - name: Creating uninitialized /etc/machine-id
+      become: true
+      ansible.builtin.lineinfile:
+        path: /etc/machine-id
+        line: uninitialized
+        create: true
 
