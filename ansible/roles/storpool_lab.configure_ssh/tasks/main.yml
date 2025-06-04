@@ -14,7 +14,7 @@
 - name: Download SSH server keys
   become: yes
   ansible.builtin.get_url:
-    url: "http://172.16.2.254/sysrcd/{{ item }}"
+    url: "http://sp-mgmt.lab.storpool.local/sysrcd/{{ item }}"
     dest: "/etc/ssh/{{ item }}"
     owner: root
     group: root

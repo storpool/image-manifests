@@ -1,4 +1,4 @@
-source "qemu" "ubuntu-1804-latest" {
+source "qemu" "ubuntu-1804-latest-x86_64" {
   iso_url = "https://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-amd64.img"
   iso_checksum = "file:https://cloud-images.ubuntu.com/bionic/current/SHA256SUMS"
   format = "raw"
@@ -14,9 +14,10 @@ source "qemu" "ubuntu-1804-latest" {
   ssh_username = "ubuntu"
   ssh_password = "passw0rd"
   qemu_binary = "/usr/libexec/qemu-kvm"
+  qemuargs = [["-cpu", "host"]]
 }
 
-source "qemu" "ubuntu-2004-latest" {
+source "qemu" "ubuntu-2004-latest-x86_64" {
   iso_url = "https://cloud-images.ubuntu.com/focal/current/focal-server-cloudimg-amd64.img"
   iso_checksum = "file:https://cloud-images.ubuntu.com/focal/current/SHA256SUMS"
   format = "raw"
@@ -32,9 +33,10 @@ source "qemu" "ubuntu-2004-latest" {
   ssh_username = "ubuntu"
   ssh_password = "passw0rd"
   qemu_binary = "/usr/libexec/qemu-kvm"
+  qemuargs = [["-cpu", "host"]]
 }
 
-source "qemu" "ubuntu-2204-latest" {
+source "qemu" "ubuntu-2204-latest-x86_64" {
   iso_url = "https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd64.img"
   iso_checksum = "file:https://cloud-images.ubuntu.com/jammy/current/SHA256SUMS"
   format = "raw"
@@ -50,9 +52,10 @@ source "qemu" "ubuntu-2204-latest" {
   ssh_username = "ubuntu"
   ssh_password = "passw0rd"
   qemu_binary = "/usr/libexec/qemu-kvm"
+  qemuargs = [["-cpu", "host"]]
 }
 
-source "qemu" "ubuntu-2404-latest" {
+source "qemu" "ubuntu-2404-latest-x86_64" {
   iso_url = "https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-amd64.img"
   iso_checksum = "file:https://cloud-images.ubuntu.com/noble/current/SHA256SUMS"
   format = "raw"
@@ -68,27 +71,52 @@ source "qemu" "ubuntu-2404-latest" {
   ssh_username = "ubuntu"
   ssh_password = "passw0rd"
   qemu_binary = "/usr/libexec/qemu-kvm"
+  qemuargs = [["-cpu", "host"]]
+}
+
+source "qemu" "ubuntu-2404-latest-aarch64" {
+  iso_url = "https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-arm64.img"
+  iso_checksum = "file:https://cloud-images.ubuntu.com/noble/current/SHA256SUMS"
+  format = "raw"
+  cpus = 4
+  memory = 2048
+  disk_image = true
+  disk_size = "5G"
+  headless = true
+  disable_vnc = true
+  cd_files = ["./cloud-init/meta-data", "./cloud-init/user-data"]
+  cd_label = "cidata"
+  shutdown_command  = "echo 'packer' | sudo -S shutdown -P now"
+  ssh_username = "ubuntu"
+  ssh_password = "passw0rd"
+  qemu_binary = "/usr/local/bin/qemu-system-aarch64"
+  qemuargs = [["-cpu", "neoverse-n1"],["-machine", "virt,gic-version=max"],["-boot","strict=on"],["-bios", "/usr/local/share/qemu/edk2-aarch64-code.fd"],["-monitor", "none"]]
 }
 
 build {
-  source "qemu.ubuntu-1804-latest" {
+  source "qemu.ubuntu-1804-latest-x86_64" {
     vm_name           = "ubuntu-1804.raw"
     output_directory  = "builds/localdisk/qemu.ubuntu-1804-latest/${formatdate("YYYY-MM-DD-hh", timestamp())}"
   }
 
-  source "qemu.ubuntu-2004-latest" {
+  source "qemu.ubuntu-2004-latest-x86_64" {
     vm_name           = "ubuntu-2004.raw"
     output_directory  = "builds/localdisk/qemu.ubuntu-2004-latest/${formatdate("YYYY-MM-DD-hh", timestamp())}"
   }
 
-  source "qemu.ubuntu-2204-latest" {
+  source "qemu.ubuntu-2204-latest-x86_64" {
     vm_name           = "ubuntu-2204.raw"
     output_directory  = "builds/localdisk/qemu.ubuntu-2204-latest/${formatdate("YYYY-MM-DD-hh", timestamp())}"
   }
 
-  source "qemu.ubuntu-2404-latest" {
+  source "qemu.ubuntu-2404-latest-x86_64" {
     vm_name           = "ubuntu-2404.raw"
     output_directory  = "builds/localdisk/qemu.ubuntu-2404-latest/${formatdate("YYYY-MM-DD-hh", timestamp())}"
+  }
+
+  source "qemu.ubuntu-2404-latest-aarch64" {
+    vm_name           = "ubuntu-2404-aarch64.raw"
+    output_directory  = "builds/localdisk/qemu.ubuntu-2404-latest-aarch64/${formatdate("YYYY-MM-DD-hh", timestamp())}"
   }
 
   name = "localdisk"
@@ -96,7 +124,7 @@ build {
   provisioner "ansible" {
     playbook_file = "${path.root}/ansible/build-local-image.yml"
     extra_arguments = [
-      "--skip-tags", "check-requirements,cleanup_ifcfg_files,download-udev-rules",
+      "--skip-tags", "check-requirements,cleanup_ifcfg_files,download-udev-rules,place-static-nic-config",
       "-e", "sp_inventory_url=http://sp-mgmt.lab.storpool.local",
       "--scp-extra-args", "'-O'"
     ]
@@ -116,7 +144,7 @@ build {
 }
 
 build {
-  source "qemu.ubuntu-2004-latest" {
+  source "qemu.ubuntu-2004-latest-x86_64" {
     vm_name           = "ubuntu-2004-${formatdate("YYYYMMDD", timestamp())}.img"
     output_directory  = "builds/ubuntu-2004-nodepool"
   }
@@ -147,7 +175,7 @@ build {
 }
 
 build {
-  source "qemu.ubuntu-2204-latest" {
+  source "qemu.ubuntu-2204-latest-x86_64" {
     vm_name           = "ubuntu-2204-${formatdate("YYYYMMDD", timestamp())}.img"
     output_directory  = "builds/ubuntu-2204-nodepool"
   }
