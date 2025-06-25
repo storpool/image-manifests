@@ -101,6 +101,32 @@ source "qemu" "almalinux-9-latest" {
   cd_label           = "cidata"
 }
 
+source "qemu" "rocky-9-latest" {
+  iso_url            = "https://dl.rockylinux.org/pub/rocky/9/images/x86_64/Rocky-9-GenericCloud-Base.latest.x86_64.qcow2"
+  iso_checksum       = "069493fdc807300a22176540e9171fcff2227a92b40a7985a0c1c9e21aeebf57"
+  shutdown_command   = var.root_shutdown_command
+  accelerator        = "kvm"
+  http_directory     = var.http_directory
+  ssh_username       = "rocky"
+  ssh_password       = var.gencloud_ssh_password
+  ssh_timeout        = var.ssh_timeout
+  cpus               = var.cpus
+  disk_image         = true
+  disk_interface     = "virtio-scsi"
+  disk_size          = "38G"
+  disk_cache         = "unsafe"
+  disk_discard       = "unmap"
+  disk_detect_zeroes = "unmap"
+  format             = "raw"
+  headless           = var.headless
+  memory             = var.memory
+  net_device         = "virtio-net"
+  qemu_binary        = var.qemu_binary
+  qemuargs           = [["-cpu", "host"]]
+  cd_files           = ["./cloud-init/meta-data", "./cloud-init/user-data"]
+  cd_label           = "cidata"
+}
+
 build {
   source "qemu.centos-7-prebaked" {
     vm_name           = "centos-7.raw"
@@ -120,6 +146,11 @@ build {
   source "qemu.almalinux-9-latest" {
     vm_name           = "almalinux-9.raw"
     output_directory  = "builds/localdisk/qemu.almalinux-9-latest/${formatdate("YYYY-MM-DD-hh", timestamp())}"
+  }
+
+  source "qemu.rocky-9-latest" {
+    vm_name           = "rocky-9.raw"
+    output_directory  = "builds/localdisk/qemu.rocky-9-latest/${formatdate("YYYY-MM-DD-hh", timestamp())}"
   }
 
   name = "localdisk"
