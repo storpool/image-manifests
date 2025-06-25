@@ -76,8 +76,8 @@ source "qemu" "oraclelinux-9-latest" {
 }
 
 source "qemu" "almalinux-9-latest" {
-  iso_url            = "https://repo.almalinux.org/almalinux/9/cloud/x86_64/images/AlmaLinux-9-GenericCloud-9.5-20241120.x86_64.qcow2"
-  iso_checksum       = "abddf01589d46c841f718cec239392924a03b34c4fe84929af5d543c50e37e37"
+  iso_url            = "https://repo.almalinux.org/almalinux/9/cloud/x86_64/images/AlmaLinux-9-GenericCloud-9.6-20250522.x86_64.qcow2"
+  iso_checksum       = "b08cd5db79bf32860412f5837e8c7b8df9447e032376e3c622840b31aaf26bc6"
   shutdown_command   = var.root_shutdown_command
   accelerator        = "kvm"
   http_directory     = var.http_directory
